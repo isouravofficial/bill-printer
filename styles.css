@@ -184,7 +184,8 @@ body{
 .receipt-iocl.has-custom-logo .logo-brand{ display:none; }
 
 /* drop the default circular badge outline once a custom logo is uploaded — the uploaded image supplies its own shape */
-.receipt-iocl.has-custom-logo .logo-circle{ border:none; border-radius:0; }
+.receipt-iocl.has-custom-logo .logo-circle{ border:none; border-radius:0; width:84px; height:84px; margin-bottom:2px; }
+.receipt-iocl.has-custom-logo .logo-wrap{ margin-bottom:4px; }
 
 /* ================= BPCL THEME ================= */
 .receipt-bpcl{
