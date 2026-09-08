@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuel Bill Printer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="panel">
+
+    <header class="brand">
+      <span class="brand-mark">🧾</span>
+      <div class="brand-text">
+        <h1>Bill Printer</h1>
+        <p>Edit &amp; print thermal receipts</p>
+      </div>
+    </header>
+
+    <div class="row-2">
+      <label class="field">
+        <span>Bill Format</span>
+        <select id="formatSelect">
+          <option value="bpcl">BPCL</option>
+          <option value="iocl" selected>IndianOil</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Paper Width</span>
+        <select id="paperWidth">
+          <option value="58" selected>58mm</option>
+          <option value="80">80mm</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="card logo-card">
+      <div class="logo-thumb" id="logoThumb">🏷️</div>
+      <div class="logo-card-actions">
+        <span class="card-label">Logo</span>
+        <div class="logo-card-buttons">
+          <label class="link-btn file-btn">
+            <span id="uploadLabelText">Upload</span>
+            <input type="file" id="logoFile" accept="image/*" hidden>
+          </label>
+          <button type="button" class="link-btn" id="removeLogoBtn">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="conn-status" id="connStatus" data-state="off">
+      <span class="dot"></span>
+      <span id="connText">Not connected — Print uses the system dialog</span>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-outline" id="connectBtBtn">🔗 Connect Bluetooth Printer</button>
+      <button type="button" class="btn btn-primary" id="printBtn">🖨️ Print</button>
+      <button type="button" class="link-btn muted center" id="printSystemLink">Use system print dialog instead</button>
+    </div>
+
+    <button type="button" class="link-btn danger center" id="resetBtn">↺ Reset fields &amp; logo</button>
+
+    <details class="help">
+      <summary>How printing works</summary>
+      <p><b>Connect Bluetooth Printer</b> pairs directly with a BLE thermal printer and streams raw ESC/POS data — no driver needed. Chrome/Edge on Android or Desktop only.</p>
+      <p><b>System dialog</b> works if the printer is already installed as an OS printer (Android print service, or a paired Windows/Mac Bluetooth printer).</p>
+      <p>Tap any value on the receipt to edit it — the preview updates instantly because you're editing the real layout.</p>
+    </details>
+
+    <details class="log-details">
+      <summary>Connection log</summary>
+      <div class="status" id="statusLog">Ready.</div>
+    </details>
+
+  </aside>
+
+  <!-- ==================== PREVIEW STAGE ==================== -->
+  <main class="stage">
+    <div class="stage-hint">Live preview — this is exactly what will print. Click any field to edit it.</div>
+
+    <!-- ---------- BPCL TEMPLATE ---------- -->
+    <div id="receipt-bpcl" class="receipt receipt-bpcl">
+      <div class="logo-wrap">
+        <div class="logo-badge logo-visual" data-default="true">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="47" fill="#fff" stroke="#000" stroke-width="4"/>
+            <path d="M50,4
+                     A46,46 0 0,1 50,96
+                     A23,23 0 0,1 50,50
+                     A23,23 0 0,0 50,4
+                     Z" fill="#0033A0"/>
+            <path d="M50,4
+                     A46,46 0 0,0 50,96
+                     A23,23 0 0,0 50,50
+                     A23,23 0 0,1 50,4
+                     Z" fill="#F7941D"/>
+            <circle cx="50" cy="27" r="7.5" fill="#F7941D"/>
+            <circle cx="50" cy="73" r="7.5" fill="#0033A0"/>
+          </svg>
+        </div>
+        <div class="logo-caption">Bharat<br>Petroleum</div>
+      </div>
+
+      <div class="addr-block">
+        <div class="addr-line" contenteditable="true">Welcome To BPCL</div>
+        <div class="addr-line" contenteditable="true">BP CHAKIA</div>
+        <div class="addr-line" contenteditable="true">Near Toll Plaza</div>
+        <div class="addr-line" contenteditable="true">SEMRA CHAKIA</div>
+        <div class="addr-line" contenteditable="true">East Champaran</div>
+      </div>
+
+      <div class="fields-block">
+        <div class="field-row"><span class="label">Bill No:</span><span class="value" contenteditable="true"></span></div>
+        <div class="field-row"><span class="label">Date:</span><span class="value" contenteditable="true">03-09-2026</span></div>
+        <div class="field-row"><span class="label">Time:</span><span class="value" contenteditable="true">12:23:52</span></div>
+        <div class="field-row"><span class="label">BayNo:</span><span class="value" contenteditable="true">4</span></div>
+        <div class="field-row"><span class="label">Nozzle no:</span><span class="value" contenteditable="true">4</span></div>
+        <div class="field-row"><span class="label">Product:</span><span class="value" contenteditable="true">DIESEL</span></div>
+        <div class="field-row"><span class="label">PayMode:</span><span class="value" contenteditable="true">CASH</span></div>
+        <div class="field-row"><span class="label">Txn Id:</span><span class="value" contenteditable="true">6090313203</span></div>
+
+        <div class="spacer"></div>
+        <div class="field-row left"><span class="label">Attendant:</span><span class="value" contenteditable="true"></span></div>
+        <div class="spacer"></div>
+
+        <div class="field-row left"><span class="label">TxSt:</span><span class="value" contenteditable="true">03-09-26&nbsp;&nbsp;12:19:36</span></div>
+        <div class="field-row left"><span class="label">TxEnd:</span><span class="value" contenteditable="true">03-09-26&nbsp;&nbsp;12:21:49</span></div>
+        <div class="field-row"><span class="label">Rate/Ltr.:</span><span class="value" contenteditable="true">100.50</span></div>
+        <div class="field-row"><span class="label">Volume(Ltr.):</span><span class="value" contenteditable="true">39.80</span></div>
+        <div class="field-row"><span class="label">Amount(Rs.):</span><span class="value" contenteditable="true">4000.00</span></div>
+        <div class="field-row"><span class="label">VechNo:</span><span class="value" contenteditable="true">1048958248</span></div>
+        <div class="field-row"><span class="label">Mobile no:</span><span class="value" contenteditable="true"></span></div>
+      </div>
+
+      <div class="thanks" contenteditable="true">Thnks for the Visit</div>
+    </div>
+
+    <!-- ---------- INDIANOIL TEMPLATE ---------- -->
+    <div id="receipt-iocl" class="receipt receipt-iocl active">
+      <div class="logo-wrap">
+        <div class="logo-circle logo-visual" data-default="true">
+          <div class="hindi">इंडियनऑयल</div>
+        </div>
+        <div class="logo-brand">IndianOil</div>
+      </div>
+
+      <div style="margin-bottom:4px;">
+        <div class="addr-line" contenteditable="true">SAFAR</div>
+        <div class="addr-line" contenteditable="true">SITALPUR</div>
+        <div class="addr-line" contenteditable="true">MOTIHARI</div>
+      </div>
+
+      <div class="fields-block">
+        <div class="field-row"><span class="label">Bill No</span><span class="colon">:</span><span class="value" contenteditable="true">Aug-647465-ORGNL</span></div>
+        <div class="field-row"><span class="label">Trns.ID</span><span class="colon">:</span><span class="value" contenteditable="true">0000000300187317</span></div>
+        <div class="field-row"><span class="label">Atnd ID</span><span class="colon">:</span><span class="value" contenteditable="true"></span></div>
+        <div class="field-row"><span class="label">Receipt</span><span class="colon">:</span><span class="value" contenteditable="true">Physical Receipt</span></div>
+        <div class="field-row"><span class="label">Vehi.No</span><span class="colon">:</span><span class="value" contenteditable="true">1048916759</span></div>
+        <div class="field-row"><span class="label">Mob.No</span><span class="colon">:</span><span class="value" contenteditable="true">NotEntered</span></div>
+        <div class="field-row"><span class="label">Date</span><span class="colon">:</span><span class="value" contenteditable="true">26/08/2026</span></div>
+        <div class="field-row"><span class="label">Time</span><span class="colon">:</span><span class="value" contenteditable="true">08:33:58</span></div>
+        <div class="field-row"><span class="label">FP. ID</span><span class="colon">:</span><span class="value" contenteditable="true">1</span></div>
+        <div class="field-row"><span class="label">Nozl No</span><span class="colon">:</span><span class="value" contenteditable="true">2</span></div>
+        <div class="field-row"><span class="label">Fuel</span><span class="colon">:</span><span class="value" contenteditable="true">H.S.D</span></div>
+        <div class="field-row"><span class="label">Preset</span><span class="colon">:</span><span class="value" contenteditable="true">Rs.3000</span></div>
+        <div class="field-row"><span class="label">Rate</span><span class="colon">:</span><span class="value" contenteditable="true">Rs.100.52</span></div>
+        <div class="field-row"><span class="label">Sale</span><span class="colon">:</span><span class="value" contenteditable="true">Rs.3000.00</span></div>
+        <div class="field-row"><span class="label">Volume</span><span class="colon">:</span><span class="value" contenteditable="true">29.84L</span></div>
+      </div>
+
+      <div class="footer-space"></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

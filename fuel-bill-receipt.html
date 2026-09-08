@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fuel Bill Receipt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper-width: 80mm;
+  }
+  * { box-sizing: border-box; }
+  body{
+    background:#e9e9e9;
+    font-family:'Courier Prime', 'Consolas', 'Courier New', Courier, monospace;
+    margin:0;
+    padding:24px 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  /* ---------- Toolbar (screen only) ---------- */
+  .toolbar{
+    width: var(--paper-width);
+    max-width:340px;
+    display:flex;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .toolbar button{
+    flex:1;
+    padding:10px 8px;
+    font-family:Arial, sans-serif;
+    font-size:13px;
+    font-weight:600;
+    border:1px solid #333;
+    background:#222;
+    color:#fff;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  .toolbar button.secondary{
+    background:#fff;
+    color:#222;
+  }
+  .toolbar button:active{ transform: translateY(1px); }
+
+  .hint{
+    width: var(--paper-width);
+    max-width:340px;
+    font-family:Arial, sans-serif;
+    font-size:11px;
+    color:#666;
+    margin-bottom:10px;
+    line-height:1.4;
+  }
+
+  /* ---------- Receipt ---------- */
+  #receipt{
+    width: var(--paper-width);
+    background:#fff;
+    padding:10px 8px 16px;
+    font-size:12.5px;
+    font-weight:700;
+    line-height:1.45;
+    color:#000;
+    box-shadow:0 2px 10px rgba(0,0,0,.25);
+  }
+
+  .center{ text-align:center; }
+
+  .logo-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:2px 0 8px;
+  }
+  .logo-circle{
+    width:70px;
+    height:70px;
+    border:2.5px solid #000;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:4px;
+  }
+  .logo-circle .hindi{
+    background:#000;
+    color:#fff;
+    font-family:Arial, sans-serif;
+    font-size:9.5px;
+    font-weight:bold;
+    padding:2px 4px;
+    letter-spacing:0.5px;
+  }
+  .logo-brand{
+    font-family:Arial, sans-serif;
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:0.3px;
+  }
+
+  .addr-line{ font-size:13px; text-align:left; }
+
+  .fields-block{
+    margin-top:4px;
+  }
+  .field-row{
+    display:flex;
+    font-size:13px;
+    white-space:pre;
+  }
+  .field-row .label{
+    display:inline-block;
+    width:7ch;
+    flex-shrink:0;
+  }
+  .field-row .colon{
+    display:inline-block;
+    width:1ch;
+    flex-shrink:0;
+  }
+  .field-row .value{
+    flex:1;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  [contenteditable="true"]{
+    outline: 1px dashed transparent;
+    border-radius:2px;
+  }
+  [contenteditable="true"]:hover{
+    outline-color:#bbb;
+  }
+  [contenteditable="true"]:focus{
+    outline-color:#0a84ff;
+    background:#f3f8ff;
+  }
+
+  .footer-space{
+    height:14px;
+  }
+
+  /* ---------- Print rules ---------- */
+  @media print{
+    @page{
+      size: 80mm auto;
+      margin: 0;
+    }
+    body{
+      background:#fff;
+      padding:0;
+      display:block;
+    }
+    .toolbar, .hint{ display:none; }
+    #receipt{
+      width:80mm;
+      box-shadow:none;
+      padding:6px 6px 10px;
+    }
+    [contenteditable="true"]{ outline:none !important; background:transparent !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button onclick="window.print()">Print Receipt</button>
+    <button class="secondary" onclick="resetFields()">Reset</button>
+  </div>
+  <div class="hint">Tap any field to edit it. When ready, hit Print and choose your thermal printer (paper size 80mm).</div>
+
+  <div id="receipt">
+
+    <div class="logo-wrap">
+      <div class="logo-circle">
+        <div class="hindi">इंडियनऑयल</div>
+      </div>
+      <div class="logo-brand">IndianOil</div>
+    </div>
+
+    <div style="margin-bottom:4px;">
+      <div class="addr-line" contenteditable="true">SAFAR</div>
+      <div class="addr-line" contenteditable="true">SITALPUR</div>
+      <div class="addr-line" contenteditable="true">MOTIHARI</div>
+    </div>
+
+    <div class="fields-block">
+      <div class="field-row"><span class="label">Bill No</span><span class="colon">:</span><span class="value" contenteditable="true">Aug-647465-ORGNL</span></div>
+      <div class="field-row"><span class="label">Trns.ID</span><span class="colon">:</span><span class="value" contenteditable="true">0000000300187317</span></div>
+      <div class="field-row"><span class="label">Atnd ID</span><span class="colon">:</span><span class="value" contenteditable="true"></span></div>
+      <div class="field-row"><span class="label">Receipt</span><span class="colon">:</span><span class="value" contenteditable="true">Physical Receipt</span></div>
+      <div class="field-row"><span class="label">Vehi.No</span><span class="colon">:</span><span class="value" contenteditable="true">1048916759</span></div>
+      <div class="field-row"><span class="label">Mob.No</span><span class="colon">:</span><span class="value" contenteditable="true">NotEntered</span></div>
+      <div class="field-row"><span class="label">Date</span><span class="colon">:</span><span class="value" contenteditable="true">26/08/2026</span></div>
+      <div class="field-row"><span class="label">Time</span><span class="colon">:</span><span class="value" contenteditable="true">08:33:58</span></div>
+      <div class="field-row"><span class="label">FP. ID</span><span class="colon">:</span><span class="value" contenteditable="true">1</span></div>
+      <div class="field-row"><span class="label">Nozl No</span><span class="colon">:</span><span class="value" contenteditable="true">2</span></div>
+      <div class="field-row"><span class="label">Fuel</span><span class="colon">:</span><span class="value" contenteditable="true">H.S.D</span></div>
+      <div class="field-row"><span class="label">Preset</span><span class="colon">:</span><span class="value" contenteditable="true">Rs.3000</span></div>
+      <div class="field-row"><span class="label">Rate</span><span class="colon">:</span><span class="value" contenteditable="true">Rs.100.52</span></div>
+      <div class="field-row"><span class="label">Sale</span><span class="colon">:</span><span class="value" contenteditable="true">Rs.3000.00</span></div>
+      <div class="field-row"><span class="label">Volume</span><span class="colon">:</span><span class="value" contenteditable="true">29.84L</span></div>
+    </div>
+
+    <div class="footer-space"></div>
+
+  </div>
+
+<script>
+  const original = document.getElementById('receipt').innerHTML;
+  function resetFields(){
+    document.getElementById('receipt').innerHTML = original;
+  }
+</script>
+
+</body>
+</html>
