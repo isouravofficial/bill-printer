@@ -243,3 +243,10 @@ body{
   .receipt::before, .receipt::after{ display:none !important; }
   [contenteditable="true"]{ outline:none !important; background:transparent !important; }
 }
+
+/* narrow phones: stack the sidebar above the receipt instead of side-by-side */
+@media (max-width: 720px){
+  .app{ flex-direction:column; height:auto; min-height:100vh; }
+  .panel{ width:100%; max-height:none; border-right:none; border-bottom:1px solid #000; }
+  .stage{ padding:28px 16px 48px; }
+}
