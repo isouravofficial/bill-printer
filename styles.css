@@ -191,7 +191,7 @@ body{
   color:#000;
 }
 .receipt-bpcl .logo-wrap{ display:flex; flex-direction:column; align-items:center; margin:2px 0 6px; }
-.receipt-bpcl .logo-badge{ width:95px; }
+.receipt-bpcl .logo-badge{ width:133px; }
 .receipt-bpcl .addr-block{ text-align:center; margin-bottom:10px; }
 .receipt-bpcl .addr-line{ font-size:14px; }
 .receipt-bpcl .fields-block{ margin-top:2px; }
