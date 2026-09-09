@@ -176,16 +176,8 @@ body{
 [contenteditable="true"]:hover{ outline-color:#bbb; }
 [contenteditable="true"]:focus{ outline-color:var(--accent); background:#eef4ff; }
 
-.logo-visual img{ display:block; width:100%; height:100%; object-fit:contain; }
+.logo-visual img{ display:block; width:100%; height:auto; }
 .logo-visual.custom-logo{ background:#fff; }
-
-/* hide the default brand caption once a custom logo is uploaded */
-.receipt-bpcl.has-custom-logo .logo-caption{ display:none; }
-.receipt-iocl.has-custom-logo .logo-brand{ display:none; }
-
-/* drop the default circular badge outline once a custom logo is uploaded — the uploaded image supplies its own shape */
-.receipt-iocl.has-custom-logo .logo-circle{ border:none; border-radius:0; width:84px; height:84px; margin-bottom:2px; }
-.receipt-iocl.has-custom-logo .logo-wrap{ margin-bottom:4px; }
 
 /* ================= BPCL THEME ================= */
 .receipt-bpcl{
@@ -198,10 +190,8 @@ body{
   line-height:1.55;
   color:#000;
 }
-.receipt-bpcl .logo-wrap{ display:flex; flex-direction:column; align-items:center; margin:2px 0 10px; }
-.receipt-bpcl .logo-badge{ width:66px; height:66px; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
-.receipt-bpcl .logo-badge svg{ width:100%; height:100%; }
-.receipt-bpcl .logo-caption{ font-family:Arial, sans-serif; font-size:7px; font-weight:bold; letter-spacing:0.3px; text-align:center; line-height:1.15; }
+.receipt-bpcl .logo-wrap{ display:flex; flex-direction:column; align-items:center; margin:2px 0 6px; }
+.receipt-bpcl .logo-badge{ width:118px; }
 .receipt-bpcl .addr-block{ text-align:center; margin-bottom:10px; }
 .receipt-bpcl .addr-line{ font-size:14px; }
 .receipt-bpcl .fields-block{ margin-top:2px; }
@@ -223,10 +213,8 @@ body{
   line-height:1.45;
   color:#000;
 }
-.receipt-iocl .logo-wrap{ display:flex; flex-direction:column; align-items:center; margin:2px 0 8px; }
-.receipt-iocl .logo-circle{ width:70px; height:70px; border:2.5px solid #000; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:4px; }
-.receipt-iocl .logo-circle .hindi{ background:#000; color:#fff; font-family:Arial, sans-serif; font-size:9.5px; font-weight:bold; padding:2px 4px; letter-spacing:0.5px; }
-.receipt-iocl .logo-brand{ font-family:Arial, sans-serif; font-size:15px; font-weight:bold; letter-spacing:0.3px; text-align:center; }
+.receipt-iocl .logo-wrap{ display:flex; flex-direction:column; align-items:center; margin:2px 0 6px; }
+.receipt-iocl .logo-circle{ width:118px; }
 .receipt-iocl .addr-line{ font-size:13px; text-align:left; }
 .receipt-iocl .fields-block{ margin-top:4px; }
 .receipt-iocl .field-row{ display:flex; font-size:13px; white-space:pre; }

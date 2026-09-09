@@ -89,11 +89,12 @@
     }
   }
 
-  // Reflect the given format's current logo state into the thumbnail + upload label.
+  // Reflect the given format's current logo (default or custom) into the thumbnail + upload label.
   function refreshLogoUI(fmt) {
+    const img = getLogoVisual(fmt).querySelector('img');
     const customSrc = getLogoVisual(fmt).dataset.customSrc;
-    logoThumb.innerHTML = customSrc ? `<img src="${customSrc}" alt="logo">` : '';
-    if (!customSrc) logoThumb.textContent = DEFAULT_THUMB;
+    logoThumb.innerHTML = img ? `<img src="${img.getAttribute('src')}" alt="logo">` : '';
+    if (!img) logoThumb.textContent = DEFAULT_THUMB;
     uploadLabelText.textContent = customSrc ? 'Change' : 'Upload';
   }
 
@@ -103,7 +104,6 @@
     el.classList.add('custom-logo');
     el.dataset.default = 'false';
     el.dataset.customSrc = dataUrl;
-    receipts[fmt].classList.add('has-custom-logo');
     if (fmt === currentFormat()) refreshLogoUI(fmt);
   }
 
@@ -116,7 +116,6 @@
     el.classList.remove('custom-logo');
     el.dataset.default = 'true';
     delete el.dataset.customSrc;
-    receipts[fmt].classList.remove('has-custom-logo');
     if (fmt === currentFormat()) refreshLogoUI(fmt);
   }
 
@@ -152,7 +151,6 @@
   resetBtn.addEventListener('click', () => {
     const fmt = currentFormat();
     receipts[fmt].innerHTML = originalHTML[fmt];
-    receipts[fmt].classList.remove('has-custom-logo');
     clearStoredLogo(fmt);
     logoFile.value = '';
     refreshLogoUI(fmt);
@@ -334,10 +332,6 @@
   const ESC_INIT = [0x1B, 0x40];
   const ALIGN_LEFT = [0x1B, 0x61, 0x00];
   const ALIGN_CENTER = [0x1B, 0x61, 0x01];
-  const BOLD_ON = [0x1B, 0x45, 0x01];
-  const BOLD_OFF = [0x1B, 0x45, 0x00];
-  const DOUBLE_SIZE = [0x1D, 0x21, 0x11];
-  const NORMAL_SIZE = [0x1D, 0x21, 0x00];
   const FEED_CUT = [0x1B, 0x64, 0x03, 0x1D, 0x56, 0x42, 0x00];
 
   function textBytes(str) {
@@ -371,28 +365,20 @@
     const fmt = currentFormat();
     const receiptEl = activeReceipt();
     const logoVisual = getLogoVisual(fmt);
-    const customSrc = logoVisual.dataset.customSrc;
+    const logoImg = logoVisual.querySelector('img');
 
     let bytes = [...ESC_INIT];
 
     bytes.push(...ALIGN_CENTER);
-    if (customSrc) {
+    if (logoImg) {
       // match the logo's on-screen proportion, not a fixed near-full-width raster
       const badge = fmt === 'bpcl' ? receiptEl.querySelector('.logo-badge') : receiptEl.querySelector('.logo-circle');
       const ratio = badge.getBoundingClientRect().width / receiptEl.getBoundingClientRect().width;
       const totalDots = charWidth <= 32 ? 384 : 576; // standard 58mm/80mm printable dot widths
       const rasterWidth = Math.max(24, Math.round(totalDots * ratio));
-      const rasterBytes = await buildLogoRaster(customSrc, rasterWidth);
+      const rasterBytes = await buildLogoRaster(logoImg.src, rasterWidth);
       bytes.push(...rasterBytes);
       bytes.push(0x0A);
-    } else {
-      // only print the default brand caption when there's no custom logo replacing it
-      bytes.push(...BOLD_ON, ...DOUBLE_SIZE);
-      const brandText = fmt === 'bpcl'
-        ? receiptEl.querySelector('.logo-caption').innerText.replace(/\n/g, ' ')
-        : receiptEl.querySelector('.logo-brand').innerText;
-      bytes.push(...textBytes(brandText));
-      bytes.push(...NORMAL_SIZE, ...BOLD_OFF);
     }
 
     if (fmt === 'bpcl') {
@@ -406,6 +392,7 @@
       });
     }
 
+    bytes.push(...textBytes('')); // blank line to match the visual gap before the fields block
     bytes.push(...ALIGN_LEFT);
 
     getFieldRows(receiptEl).forEach(({ label, value }) => {
